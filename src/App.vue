@@ -1,11 +1,39 @@
 <template>
-  <div id="app"></div>
+  <div id="app">
+    <h1>Welcome to To Do List App</h1>
+    <Todos v-bind:todos="todoList" />
+  </div>
 </template>
 
 <script>
+import Todos from "./components/Todos";
+
 export default {
   name: "App",
-  components: {},
+  components: {
+    Todos,
+  },
+  data() {
+    return {
+      todoList: [
+        {
+          id: 1,
+          title: "finish vue hello world",
+          completed: false,
+        },
+        {
+          id: 2,
+          title: "statsbot integration",
+          completed: true,
+        },
+        {
+          id: 3,
+          title: "dish wash",
+          completed: false,
+        },
+      ],
+    };
+  },
 };
 </script>
 
