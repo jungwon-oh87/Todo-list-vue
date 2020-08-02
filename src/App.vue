@@ -1,17 +1,30 @@
 <template>
   <div id="app">
-    <h1>Welcome to To Do List App</h1>
-    <Todos v-bind:todos="todoList" />
+    <Header />
+    <AddTodo v-on:add-todo="addTodo" />
+    <Todos v-bind:todos="todoList" v-on:del-todo="deleteTodo" />
   </div>
 </template>
 
 <script>
 import Todos from "./components/Todos";
+import Header from "./components/layout/Header";
+import AddTodo from "./components/AddTodo";
 
 export default {
   name: "App",
   components: {
     Todos,
+    Header,
+    AddTodo,
+  },
+  methods: {
+    deleteTodo(id) {
+      this.todoList = this.todoList.filter((t) => t.id !== id);
+    },
+    addTodo(newTodo) {
+      this.todoList = [...this.todoList, newTodo];
+    },
   },
   data() {
     return {
@@ -24,7 +37,7 @@ export default {
         {
           id: 2,
           title: "statsbot integration",
-          completed: true,
+          completed: false,
         },
         {
           id: 3,
@@ -47,5 +60,17 @@ export default {
 body {
   font-family: Arial, Helvetica, sans-serif;
   line-height: 1.4;
+}
+
+.btn {
+  display: inline-block;
+  border: none;
+  padding: 7px 20px;
+  cursor: pointer;
+  background-color: #555;
+  color: #fff;
+}
+.btn:hover {
+  background-color: #666;
 }
 </style>
