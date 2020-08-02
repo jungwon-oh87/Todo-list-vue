@@ -10,6 +10,7 @@
 import Todos from "./components/Todos";
 import Header from "./components/layout/Header";
 import AddTodo from "./components/AddTodo";
+import axios from "axios";
 
 export default {
   name: "App",
@@ -20,31 +21,36 @@ export default {
   },
   methods: {
     deleteTodo(id) {
-      this.todoList = this.todoList.filter((t) => t.id !== id);
+      axios
+        .delete(`https://jsonplaceholder.typicode.com/todos/${id}`)
+        .then(
+          () => (this.todoList = this.todoList.filter((todo) => todo.id !== id))
+        )
+        .catch((err) => console.log(err));
+
+      // this.todoList = this.todoList.filter((t) => t.id !== id);
     },
     addTodo(newTodo) {
-      this.todoList = [...this.todoList, newTodo];
+      const { title, completed } = newTodo;
+      axios
+        .post("https://jsonplaceholder.typicode.com/todos", {
+          title: title,
+          completed: completed,
+        })
+        .then((res) => (this.todoList = [...this.todoList, res.data]))
+        .catch((err) => console.log(err));
+      // this.todoList = [...this.todoList, newTodo];
     },
+  },
+  created() {
+    axios
+      .get("https://jsonplaceholder.typicode.com/todos?_limit=5")
+      .then((res) => (this.todoList = res.data))
+      .catch((err) => console.log(err));
   },
   data() {
     return {
-      todoList: [
-        {
-          id: 1,
-          title: "finish vue hello world",
-          completed: false,
-        },
-        {
-          id: 2,
-          title: "statsbot integration",
-          completed: false,
-        },
-        {
-          id: 3,
-          title: "dish wash",
-          completed: false,
-        },
-      ],
+      todoList: [],
     };
   },
 };
